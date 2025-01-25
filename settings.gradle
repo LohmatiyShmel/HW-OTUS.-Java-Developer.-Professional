@@ -1,3 +1,3 @@
 rootProject.name = 'GElenbergerHWOtus'
 include 'hw01-gradle'
-
+include 'hw03-annotations'
