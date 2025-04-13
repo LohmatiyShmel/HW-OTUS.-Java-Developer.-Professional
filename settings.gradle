@@ -1,3 +1,4 @@
 rootProject.name = 'GElenbergerHWOtus'
 include 'hw01-gradle'
+include 'hw-10-logging'
 
