@@ -1,7 +1,7 @@
-package Logging;
+package logging;
 
-import Demo.TestLogging;
-import Demo.TestLoggingInterface;
+import demo.TestLogging;
+import demo.TestLoggingInterface;
 
 import java.lang.reflect.Proxy;
 

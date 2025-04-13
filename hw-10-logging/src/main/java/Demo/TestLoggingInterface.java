@@ -1,4 +1,4 @@
-package Demo;
+package demo;
 
 public interface TestLoggingInterface {
     void calculation(int param);

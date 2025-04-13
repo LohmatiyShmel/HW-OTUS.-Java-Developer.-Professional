@@ -1,6 +1,6 @@
 package demo;
 
-import Logging.LoggingFactory;
+import logging.LoggingFactory;
 
 public class Demo {
     public void action() {

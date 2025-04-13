@@ -1,6 +1,6 @@
-package Demo;
+package demo;
 
-import Logging.Log;
+import logging.Log;
 
 public class TestLogging implements TestLoggingInterface {
     @Log
