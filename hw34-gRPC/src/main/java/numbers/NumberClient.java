@@ -5,8 +5,7 @@ import io.grpc.ManagedChannelBuilder;
 import io.grpc.stub.StreamObserver;
 
 import java.util.concurrent.TimeUnit;
-import java.util.concurrent.atomic.AtomicBoolean;
-import java.util.concurrent.atomic.AtomicReference;
+import java.util.concurrent.atomic.AtomicLong;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -15,8 +14,7 @@ public class NumberClient {
     private final ManagedChannel channel;
     private final NumbersServiceGrpc.NumbersServiceStub asyncStub;
 
-    private final AtomicReference<Integer> lastServerValue = new AtomicReference<>(null);
-    private final AtomicBoolean valueUsed = new AtomicBoolean(false);
+    private final AtomicLong lastServerValue = new AtomicLong(0);
 
     static {
         System.setProperty("java.util.logging.SimpleFormatter.format",
@@ -39,10 +37,9 @@ public class NumberClient {
         asyncStub.getNumbers(request, new StreamObserver<>() {
             @Override
             public void onNext(Numbers.NumberResponse response) {
-                int number = response.getNumber();
+                long number = response.getNumber();
                 logger.info("New value from server: " + number);
                 lastServerValue.set(number);
-                valueUsed.set(false);
             }
 
             @Override
@@ -58,21 +55,19 @@ public class NumberClient {
     }
 
     public void startClientLoop() throws InterruptedException {
-        int currentValue = 0;
+        long currentValue = 0;
+
         for (int i = 0; i <= 50; i++) {
-            if (!valueUsed.get() && lastServerValue.get() != null) {
-                synchronized (this) {
-                    if (!valueUsed.get()) {
-                        int serverValue = lastServerValue.get();
-                        currentValue += serverValue + 1;
-                        valueUsed.set(true);
-                        logger.info("currentValue:" + currentValue);
-                    }
-                }
+            long serverValue = lastServerValue.getAndSet(0);
+
+            if (serverValue != 0) {
+                currentValue += serverValue + 1;
+                logger.info("currentValue: " + currentValue);
             } else {
                 currentValue += 1;
-                logger.info("currentValue:" + currentValue);
+                logger.info("currentValue: " + currentValue);
             }
+
             TimeUnit.SECONDS.sleep(1);
         }
     }
