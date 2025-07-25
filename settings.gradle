@@ -1,4 +1,5 @@
 rootProject.name = 'GElenbergerHWOtus'
 include 'hw01-gradle'
 include 'hw31-Executors'
+include 'hw34-gRPC'
 
